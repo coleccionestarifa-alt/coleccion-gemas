@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QR Colección de Gemas</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:Arial,sans-serif;background:#f5f5f0;padding:20px}
+.container{max-width:1200px;margin:0 auto}
+h1{text-align:center;margin-bottom:30px;color:#2E4057}
+.qr-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:30px}
+.qr-card{background:#fff;border-radius:8px;padding:20px;box-shadow:0 2px 8px rgba(0,0,0,.1);text-align:center}
+.qr-title{font-size:16px;font-weight:600;color:#2E4057;margin-bottom:15px}
+.qr-container{margin:15px 0;min-height:150px;display:flex;align-items:center;justify-content:center}
+.qr-sku{font-size:13px;color:#999;margin-top:10px}
+@media print{
+  body{background:white}
+  .qr-grid{gap:15px}
+  .qr-card{page-break-inside:avoid;box-shadow:none;border:1px solid #ddd}
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>QR - Colección de Gemas</h1>
+  <div class="qr-grid">
+    <div class="qr-card">
+      <div class="qr-title">Aguamarina</div>
+      <div class="qr-container" id="qr701"></div>
+      <div class="qr-sku">SKU 701</div>
+    </div>
+    <div class="qr-card">
+      <div class="qr-title">Aguamarina</div>
+      <div class="qr-container" id="qr702"></div>
+      <div class="qr-sku">SKU 702</div>
+    </div>
+    <div class="qr-card">
+      <div class="qr-title">Aguamarina</div>
+      <div class="qr-container" id="qr703"></div>
+      <div class="qr-sku">SKU 703</div>
+    </div>
+    <div class="qr-card">
+      <div class="qr-title">Turmalina</div>
+      <div class="qr-container" id="qr704"></div>
+      <div class="qr-sku">SKU 704</div>
+    </div>
+    <div class="qr-card">
+      <div class="qr-title">Tanzanita</div>
+      <div class="qr-container" id="qr705"></div>
+      <div class="qr-sku">SKU 705</div>
+    </div>
+    <div class="qr-card">
+      <div class="qr-title">Topacio</div>
+      <div class="qr-container" id="qr706"></div>
+      <div class="qr-sku">SKU 706</div>
+    </div>
+    <div class="qr-card">
+      <div class="qr-title">Esmeralda</div>
+      <div class="qr-container" id="qr707"></div>
+      <div class="qr-sku">SKU 707</div>
+    </div>
+    <div class="qr-card">
+      <div class="qr-title">Aguamarina</div>
+      <div class="qr-container" id="qr708"></div>
+      <div class="qr-sku">SKU 708</div>
+    </div>
+    <div class="qr-card">
+      <div class="qr-title">Citrino</div>
+      <div class="qr-container" id="qr709"></div>
+      <div class="qr-sku">SKU 709</div>
+    </div>
+    <div class="qr-card">
+      <div class="qr-title">Citrino</div>
+      <div class="qr-container" id="qr710"></div>
+      <div class="qr-sku">SKU 710</div>
+    </div>
+    <div class="qr-card">
+      <div class="qr-title">Topacio natural</div>
+      <div class="qr-container" id="qr711"></div>
+      <div class="qr-sku">SKU 711</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const base = 'https://coleccionestarifa-alt.github.io/coleccion-gemas/ficha_';
+const skus = [701, 702, 703, 704, 705, 706, 707, 708, 709, 710, 711];
+
+skus.forEach(sku => {
+  new QRCode(document.getElementById('qr' + sku), {
+    text: base + sku + '.html',
+    width: 128,
+    height: 128
+  });
+});
+</script>
+</body>
+</html>

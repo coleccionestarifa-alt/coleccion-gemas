@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>712 · Kunzita</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Century Gothic',Century Gothic,CenturyGothic,AppleGothic,sans-serif;background:#f5f5f0;color:#222;min-height:100vh}
+.card{max-width:680px;margin:0 auto;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,.1)}
+.img-wrapper{position:relative;background:#1a1a1a;width:100%;user-select:none}
+.main-img{width:100%;max-height:440px;object-fit:contain;display:block}
+.arrow{position:absolute;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.85);border:none;border-radius:50%;width:38px;height:38px;font-size:22px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#2E4057;box-shadow:0 1px 4px rgba(0,0,0,.2);z-index:3}
+.arrow:hover{background:#fff}
+.arrow-left{left:10px}.arrow-right{right:10px}
+.counter{position:absolute;bottom:8px;right:12px;background:rgba(0,0,0,.5);color:#fff;font-size:11px;padding:2px 8px;border-radius:10px;z-index:3;pointer-events:none}
+.fullscreen-btn{position:absolute;bottom:8px;left:12px;background:rgba(255,255,255,.85);border:none;border-radius:50%;width:30px;height:30px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:3;color:#2E4057;font-size:14px}
+.fullscreen-btn:hover{background:#fff}
+.magnifier{position:absolute;width:150px;height:150px;border-radius:50%;border:2px solid rgba(255,255,255,.7);box-shadow:0 2px 12px rgba(0,0,0,.4);display:none;pointer-events:none;z-index:10;background-repeat:no-repeat;background-color:#fff}
+.lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:1000;align-items:center;justify-content:center;cursor:zoom-out}
+.lightbox.open{display:flex}
+.lightbox img{max-width:95vw;max-height:95vh;object-fit:contain;border-radius:4px}
+.lb-close{position:fixed;top:16px;right:20px;color:#fff;font-size:32px;cursor:pointer;background:none;border:none;line-height:1;z-index:1001}
+.lb-arrow{position:fixed;top:50%;transform:translateY(-50%);background:rgba(255,255,255,.15);border:none;color:#fff;font-size:32px;cursor:pointer;padding:12px 16px;border-radius:4px;z-index:1001}
+.lb-arrow:hover{background:rgba(255,255,255,.25)}
+.lb-left{left:10px}.lb-right{right:10px}
+.lb-counter{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.7);font-size:13px;z-index:1001}
+.thumbs{display:flex;gap:6px;padding:10px 14px;background:#f0ede6;overflow-x:auto}
+.thumb{width:64px;height:48px;object-fit:cover;border-radius:4px;cursor:pointer;opacity:.55;border:2px solid transparent;flex-shrink:0;transition:all .15s}
+.thumb.active,.thumb:hover{opacity:1;border-color:#2E4057}
+.body{padding:20px 22px 24px}
+.sku-badge{display:inline-block;background:#2E4057;color:#fff;font-size:11px;font-weight:600;padding:2px 9px;border-radius:4px;margin-bottom:10px;letter-spacing:.03em}
+.title{font-size:19px;font-weight:600;color:#1a1a1a;margin-bottom:18px;line-height:1.3}
+.field{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;border-bottom:.5px solid #eee;font-size:14px}
+.field:last-child{border-bottom:none}
+.field-label{color:#999;flex-shrink:0}
+.field-val{color:#1a1a1a;font-weight:500;text-align:right;margin-left:16px}
+.field-notas{align-items:flex-start}
+.notas-val{text-align:left;font-weight:400;font-size:13px;color:#444;line-height:1.5;margin-left:16px}
+.info-btn{display:flex;align-items:center;justify-content:center;margin-top:18px}
+.info-btn button{background:#2E4057;color:#fff;border:none;border-radius:6px;padding:8px 24px;font-size:14px;font-family:inherit;cursor:pointer;letter-spacing:.03em}
+.info-btn button:hover{background:#1e2d3d}
+.pw-box{display:none;margin-top:12px;background:#f5f5f0;border-radius:8px;padding:14px;border:.5px solid #e0e0d8}
+.pw-box input{width:100%;padding:8px 10px;border:.5px solid #ccc;border-radius:6px;font-family:inherit;font-size:14px;margin-bottom:8px}
+.pw-box button{background:#2E4057;color:#fff;border:none;border-radius:6px;padding:7px 18px;font-size:13px;font-family:inherit;cursor:pointer}
+.private-data{display:none;margin-top:14px;background:#f0ede6;border-radius:8px;padding:14px;border:.5px solid #d0ccc4}
+.pw-error{color:#c0392b;font-size:12px;margin-top:4px;display:none}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="img-wrapper" id="imgWrapper">
+    <button class="arrow arrow-left" onclick="move(-1)">&#8249;</button>
+    <img id="mainImg" class="main-img" src="">
+    <button class="arrow arrow-right" onclick="move(1)">&#8250;</button>
+    <div class="counter" id="counter"></div>
+    <button class="fullscreen-btn" onclick="openLightbox()" title="Pantalla completa">&#x26F6;</button>
+    <div class="magnifier" id="magnifier"></div>
+  </div>
+  <div class="thumbs" id="thumbs"></div>
+  <div class="body">
+    <div class="sku-badge">SKU 712</div>
+    <div class="title">Kunzita</div>
+    <div class="field"><span class="field-label">Peso</span><span class="field-val">4.7 ct</span></div>
+    <div class="field"><span class="field-label">Dimensiones</span><span class="field-val">10,68 x 7,71 x 6,87 mm</span></div>
+    <div class="field"><span class="field-label">Certificado</span><span class="field-val">IGE-D65102</span></div>
+    <div class="field"><span class="field-label">Color</span><span class="field-val">Rosa purpúreo</span></div>
+    <div class="field"><span class="field-label">Tratamiento</span><span class="field-val">Aplicación de calor sin evidencias de tratamiento</span></div>
+    <div class="field"><span class="field-label">Sellado</span><span class="field-val">No</span></div>
+    <div class="field"><span class="field-label">Forma</span><span class="field-val">Rectangular esmeralda</span></div>
+    <div class="field"><span class="field-label">Pureza</span><span class="field-val">Transparente</span></div>
+    <div class="field"><span class="field-label">Origen</span><span class="field-val">—</span></div>
+    <div class="info-btn">
+      <button onclick="togglePw()">+ Info</button>
+    </div>
+    <div class="pw-box" id="pwBox">
+      <input type="password" id="pwInput" placeholder="Contraseña" onkeydown="if(event.key==='Enter')checkPw()">
+      <button onclick="checkPw()">Verificar</button>
+      <div class="pw-error" id="pwError">Contraseña incorrecta</div>
+    </div>
+    <div class="private-data" id="privateData">
+      <div class="field"><span class="field-label">Ubicación</span><span class="field-val">Por llegar</span></div>
+      <div class="field"><span class="field-label">Vendedor</span><span class="field-val">Catawiki-Joseandréshurtadomelero</span></div>
+      <div class="field"><span class="field-label">Fecha de compra</span><span class="field-val">2026-04-20 00:00:00</span></div>
+      <div class="field"><span class="field-label">Precio</span><span class="field-val">52</span></div>
+      <div class="field"><span class="field-label">Portes</span><span class="field-val">11</span></div>
+      <div class="field" style="border-bottom:none"><span class="field-label">Total</span><span class="field-val">—</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="lightbox" id="lightbox">
+  <button class="lb-close" onclick="closeLightbox()">×</button>
+  <button class="lb-arrow lb-left" onclick="move(-1)">&#8249;</button>
+  <img id="lbImg" src="">
+  <button class="lb-arrow lb-right" onclick="move(1)">&#8250;</button>
+  <div class="lb-counter" id="lbCounter"></div>
+</div>
+
+<div style="text-align:center;padding:28px 0 36px"><a href="https://coleccionestarifa-alt.github.io/coleccion-gemas/" style="display:inline-block;text-decoration:none;background:#2E4057;color:#fff;font-family:Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:600;padding:2px 14px;border-radius:6px;letter-spacing:.03em">Volver al índice</a></div>
+
+<script>
+const imgs = {imgs_json};
+let cur = 0;
+const mainImg = document.getElementById('mainImg');
+const lbImg = document.getElementById('lbImg');
+const counter = document.getElementById('counter');
+const lbCounter = document.getElementById('lbCounter');
+const lightbox = document.getElementById('lightbox');
+const magnifier = document.getElementById('magnifier');
+const ZOOM = 2.5;
+const LENS = 150;
+
+function setMain(i) {{
+  cur = i;
+  mainImg.src = imgs[i];
+  lbImg.src = imgs[i];
+  const l = (i + 1) + ' / ' + imgs.length;
+  counter.textContent = l;
+  lbCounter.textContent = l;
+  const thumbs = document.querySelectorAll('.thumb');
+  thumbs.forEach((t, j) => t.classList.toggle('active', j === i));
+  magnifier.style.backgroundImage = 'url(' + imgs[i] + ')';
+}}
+
+function move(dir) {{
+  setMain((cur + dir + imgs.length) % imgs.length);
+}}
+
+function openLightbox() {{
+  lbImg.src = imgs[cur];
+  lightbox.classList.add('open');
+}}
+
+function closeLightbox() {{
+  lightbox.classList.remove('open');
+}}
+
+function togglePw() {{
+  const b = document.getElementById('pwBox');
+  b.style.display = b.style.display === 'block' ? 'none' : 'block';
+  if (b.style.display === 'block') document.getElementById('pwInput').focus();
+}}
+
+function checkPw() {{
+  const v = document.getElementById('pwInput').value;
+  const err = document.getElementById('pwError');
+  const priv = document.getElementById('privateData');
+  if (v === PW) {{
+    priv.style.display = 'block';
+    document.getElementById('pwBox').style.display = 'none';
+    err.style.display = 'none';
+  }} else {{
+    err.style.display = 'block';
+    document.getElementById('pwInput').value = '';
+  }}
+}}
+
+mainImg.addEventListener('mouseenter', () => {{
+  magnifier.style.backgroundImage = 'url(' + imgs[cur] + ')';
+  magnifier.style.display = 'block';
+}});
+
+mainImg.addEventListener('mouseleave', () => {{
+  magnifier.style.display = 'none';
+}});
+
+mainImg.addEventListener('mousemove', (e) => {{
+  const r = mainImg.getBoundingClientRect();
+  const x = e.clientX - r.left;
+  const y = e.clientY - r.top;
+  magnifier.style.left = (x - LENS / 2) + 'px';
+  magnifier.style.top = (y - LENS / 2) + 'px';
+  magnifier.style.backgroundSize = (r.width * ZOOM) + 'px ' + (r.height * ZOOM) + 'px';
+  magnifier.style.backgroundPosition = '-' + (x * ZOOM - LENS / 2) + 'px -' + (y * ZOOM - LENS / 2) + 'px';
+}});
+
+document.addEventListener('keydown', e => {{
+  if (e.key === 'ArrowLeft') move(-1);
+  if (e.key === 'ArrowRight') move(1);
+  if (e.key === 'Escape') closeLightbox();
+}});
+
+setMain(0);
+
+const PW = "Lolito00";
+
+const thumbContainer = document.getElementById('thumbs');
+imgs.forEach((img, i) => {{
+  const thumb = document.createElement('img');
+  thumb.className = 'thumb';
+  thumb.src = img;
+  thumb.onclick = () => setMain(i);
+  thumbContainer.appendChild(thumb);
+}});
+</script>
+</body>
+</html>
