@@ -163,5 +163,22 @@ mainImg.addEventListener('mousemove',(e)=>{const r=mainImg.getBoundingClientRect
 document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')move(-1);if(e.key==='ArrowRight')move(1);if(e.key==='Escape')closeLightbox();});
 setMain(0);
 </script>
-<div style="text-align:center;padding:28px 0 36px"><a href="https://coleccionestarifa-alt.github.io/coleccion-gemas/" style="display:inline-block;text-decoration:none;background:#2E4057;color:#fff;font-family:Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:600;padding:2px 14px;border-radius:6px;letter-spacing:.03em">Volver al índice</a></div></body>
+<div id="nav-bar" style="text-align:center;padding:28px 0 36px;display:flex;justify-content:center;gap:10px;align-items:center">
+<a id="nav-prev" href="#" style="display:inline-block;text-decoration:none;background:#2E4057;color:#fff;font-family:Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:600;padding:2px 14px;border-radius:6px;letter-spacing:.03em">&#8249;</a>
+<a href="https://coleccionestarifa-alt.github.io/coleccion-gemas/" style="display:inline-block;text-decoration:none;background:#2E4057;color:#fff;font-family:Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:600;padding:2px 14px;border-radius:6px;letter-spacing:.03em">Volver al índice</a>
+<a id="nav-next" href="#" style="display:inline-block;text-decoration:none;background:#2E4057;color:#fff;font-family:Century Gothic,AppleGothic,sans-serif;font-size:11px;font-weight:600;padding:2px 14px;border-radius:6px;letter-spacing:.03em">&#8250;</a>
+</div>
+<script>
+(function(){
+  var skus = [701, 702, 703, 704, 705, 706, 707, 708, 709, 710, 711, 712, 713];
+  var current = parseInt(window.location.pathname.split('ficha_')[1]);
+  var idx = skus.indexOf(current);
+  var prev = document.getElementById('nav-prev');
+  var next = document.getElementById('nav-next');
+  if(idx <= 0){ prev.style.opacity='0.3'; prev.href='#'; prev.onclick=function(){return false;}; }
+  else{ prev.href='ficha_'+skus[idx-1]+'.html'; }
+  if(idx >= skus.length-1){ next.style.opacity='0.3'; next.href='#'; next.onclick=function(){return false;}; }
+  else{ next.href='ficha_'+skus[idx+1]+'.html'; }
+})();
+</script></body>
 </html>
